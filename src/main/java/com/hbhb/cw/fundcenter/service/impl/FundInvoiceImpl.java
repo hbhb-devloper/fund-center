@@ -196,10 +196,10 @@ public class FundInvoiceImpl implements FundInvoiceService {
         UserInfo userInfo = userApi.getUserInfoById(userId);
         String nickName = userInfo.getNickName();
         FundInvoice invoice = fundInvoiceMapper.single(vo.getId());
-        // 判断用户身份
-        if (!nickName.equals(invoice.getClientManager()) || !nickName.equals(invoice.getInvoiceUser())) {
-            throw new FundException(FundErrorCode.FUND_INVOICE_PERMISSION_DENIED);
-        }
+        // todo 客户经理和开票人只能修改对应的字段
+//        if (!nickName.equals(invoice.getClientManager()) && !nickName.equals(invoice.getInvoiceUser())) {
+//            throw new FundException(FundErrorCode.FUND_INVOICE_PERMISSION_DENIED);
+//        }
         FundInvoice invoiceInfo = buildInvoice(vo, userInfo);
         fundInvoiceMapper.updateTemplateById(invoiceInfo);
         // 修改附件

@@ -23,7 +23,7 @@ selectPageByCond
         fi.invoice_account                              as invoiceAccount,
         fi.is_cancellation                              as isCancellation,
         fi.billing_number                               as billingNumber,
-        count(fif.id) > 0                               as isFile
+        count(fif.id) > 0                               as hasFile
     -- @}
     from fund_invoice fi
         left join fund_invoice_file fif on fi.id = fif.invoice_id
