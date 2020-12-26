@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author wangxiaogang
  * @since 2020-08-13
  */
-@Tag(name = "客户资金-单位 | 新版本 /fund -> /fund/unit")
+@Tag(name = "客户资金-单位")
 @RequestMapping("/unit")
 @RestController
 @Slf4j
@@ -55,7 +55,7 @@ public class FundUnitController {
         return fundUnitService.pageFundUnit(pageNum, pageSize, unitCode, unitName);
     }
 
-    @Operation(summary = "根据条件查询单位信息下拉框列表 | 新版本 /cond-list -> /select")
+    @Operation(summary = "根据条件查询单位信息下拉框列表")
     @GetMapping("/select")
     public List<FundUnitVO> getFundUnitSelect(
             @Parameter(description = "单位编号") @RequestParam(required = false) String unitCode,
@@ -63,7 +63,7 @@ public class FundUnitController {
         return fundUnitService.listFundUnit(unitCode, unitName);
     }
 
-    @Operation(summary = "修改单位信息 | 新版本 /update -> /")
+    @Operation(summary = "修改单位信息")
     @PutMapping("")
     public void updateFundUnit(@RequestBody FundUnitVO vo) {
         fundUnitService.updateFundUnit(vo);

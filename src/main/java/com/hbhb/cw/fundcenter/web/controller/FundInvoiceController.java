@@ -51,7 +51,7 @@ public class FundInvoiceController {
     @Resource
     private FundInvoiceFlowService fundInvoiceFlowService;
 
-    @Operation(summary = "发票信息列表 | 新版本 fileLabel,invoiceContentLabel,businessLabel,stateLabel,isCancellationLabel去掉 isFile -> hasFile")
+    @Operation(summary = "发票信息列表")
     @GetMapping("/list")
     public PageResult<InvoiceResVO> pageFundInvoice(
             @Parameter(description = "页码，默认为1") @RequestParam(required = false) Integer pageNum,
@@ -65,34 +65,34 @@ public class FundInvoiceController {
         return fundInvoiceService.pageFundInvoice(pageNum, pageSize, userId, cond);
     }
 
-    @Operation(summary = "获取发票详情 | 新版本 /info/{id} -> /{id}, 出参结构")
+    @Operation(summary = "获取发票详情")
     @GetMapping("/{id}")
     public InvoiceVO getFundInvoice(@Parameter(description = "发票id") @PathVariable Long id) {
         return fundInvoiceService.getFundInvoiceInfo(id);
     }
 
-    @Operation(summary = "新增发票信息 | 新版本 /add -> /")
+    @Operation(summary = "新增发票信息")
     @PostMapping("")
     public void addFundInvoice(@Parameter(description = "发票信息实体") @RequestBody InvoiceVO vo,
                                @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceService.addFundInvoice(vo, userId);
     }
 
-    @Operation(summary = "修改发票信息 | 新版本 /update -> /")
+    @Operation(summary = "修改发票信息")
     @PutMapping("")
     public void updateFundInvoice(@Parameter(description = "发票信息实体") @RequestBody InvoiceVO vo,
                                   @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceService.updateFundInvoice(vo, userId);
     }
 
-    @Operation(summary = "修改发票信息 | 新版本 /update-info -> /additional", description = "收账员补充发票信息")
+    @Operation(summary = "修改发票信息", description = "收账员补充发票信息")
     @PutMapping("/additional")
     public void updateFundInvoiceExtra(@RequestBody FundInvoiceExtraVO vo,
                                        @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceService.updateFundInvoiceExtra(vo, userId);
     }
 
-    @Operation(summary = "发票作废 | 新版本 /cancellation/{id} -> /discard/{id}")
+    @Operation(summary = "发票作废")
     @PutMapping("/discard/{id}")
     public void updateCancellation(@Parameter(description = "发票id") @PathVariable Long id,
                                    @Parameter(description = "是否作废") @RequestParam Byte cancellation,
@@ -100,14 +100,14 @@ public class FundInvoiceController {
         fundInvoiceService.discardFundInvoice(id, cancellation, userId);
     }
 
-    @Operation(summary = "删除发票 | 新版本 /delete/{id} -> /{id}")
+    @Operation(summary = "删除发票")
     @DeleteMapping("/{id}")
     public void deleteFundInvoice(@Parameter(description = "id") @PathVariable Long id,
                                   @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceService.deleteFundInvoice(id, userId);
     }
 
-    @Operation(summary = "删除发票附件 | 新版本 /delete/file/{fileId} -> /file/{fileId}")
+    @Operation(summary = "删除发票附件")
     @DeleteMapping("/file/{fileId}")
     public void deleteFundInvoiceFile(@Parameter(description = "附件id") @PathVariable Long fileId,
                                       @Parameter(hidden = true) @UserId Integer userId) {
@@ -127,7 +127,7 @@ public class FundInvoiceController {
         ExcelUtil.export2Web(response, fileName, fileName, InvoiceExportVO.class, list);
     }
 
-    @Operation(summary = "发起审批 | 新版本 大改")
+    @Operation(summary = "发起审批")
     @PostMapping("/to-approve")
     public void toApprover(@RequestBody FlowToApproveVO vo,
                            @Parameter(hidden = true) @UserId Integer userId) {
@@ -135,14 +135,14 @@ public class FundInvoiceController {
         fundInvoiceService.toApprove(vo);
     }
 
-    @Operation(summary = "审批 | 新版本 大改")
+    @Operation(summary = "审批")
     @PostMapping("/approve")
     public void approve(@RequestBody FlowApproveVO vo,
                         @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceFlowService.approve(vo, userId);
     }
 
-    @Operation(summary = "获取发票流程 | 新版本 /fund/invoice/flow/list/{invoiceId} -> /fund/invoice/{id}/flows, 出参 InvoiceId -> invoiceId")
+    @Operation(summary = "获取发票流程")
     @GetMapping("/{id}/flow")
     public FlowWrapperVO getInvoiceFlows(@Parameter(description = "id") @PathVariable Long id,
                                          @Parameter(hidden = true) @UserId Integer userId) {

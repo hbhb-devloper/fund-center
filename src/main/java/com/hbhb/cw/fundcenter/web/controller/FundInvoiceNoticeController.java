@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author wxg
  * @since 2020-09-22
  */
-@Tag(name = "客户资金-工作台 | 新版本 /relocation/notice -> /notice")
+@Tag(name = "客户资金-工作台")
 @RequestMapping("/notice")
 @RestController
 public class FundInvoiceNoticeController implements NoticeApi {
@@ -36,7 +36,7 @@ public class FundInvoiceNoticeController implements NoticeApi {
     @Resource
     private FundInvoiceNoticeService fundInvoiceNoticeService;
 
-    @Operation(summary = "客户资金提醒列表 | 新版本 入参结构 firstNum -> amountMin, twoNum -> amountMax")
+    @Operation(summary = "客户资金提醒列表")
     @GetMapping("/list")
     public PageResult<FundInvoiceNoticeResVO> pageInvoiceNotice(
             @Parameter(description = "页码，默认为1") @RequestParam(required = false) Integer pageNum,
@@ -62,7 +62,7 @@ public class FundInvoiceNoticeController implements NoticeApi {
         return fundInvoiceNoticeService.listInvoiceNotice(userId);
     }
 
-    @Operation(summary = "更新提醒消息为已读 | 新版本 update/{id} -> /{id}")
+    @Operation(summary = "更新提醒消息为已读")
     @PutMapping("/{id}")
     public void changeNoticeState(@Parameter(description = "id") @PathVariable Long id) {
         fundInvoiceNoticeService.changeNoticeState(id);

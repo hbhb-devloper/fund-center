@@ -37,7 +37,7 @@ public class FundCustomerStatController {
     @Resource
     private FundCustomerStatService fundCustomerStatService;
 
-    @Operation(summary = "获取客户资金统计（分页） | 新版本 dptId -> unitId, dptName -> unitName")
+    @Operation(summary = "获取客户资金统计（分页）")
     @GetMapping("/list")
     public PageResult<CustomerStatVO> pageFundCustomerStat(
             @Parameter(description = "页码，默认为1") @RequestParam(required = false) Integer pageNum,
@@ -57,7 +57,7 @@ public class FundCustomerStatController {
         return fundCustomerStatService.getStatDetail(id);
     }
 
-    @Operation(summary = "导出客户资金统计数据 | 新版本 dptId -> unitId, dptName -> unitName")
+    @Operation(summary = "导出客户资金统计数据")
     @PostMapping("/export")
     public void export(HttpServletRequest request, HttpServletResponse response,
                        @RequestBody CustomerStatReqVO cond) {

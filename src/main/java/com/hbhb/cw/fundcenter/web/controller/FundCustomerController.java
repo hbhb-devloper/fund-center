@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author Wuyuxin
  * @since 2020-09-3
  */
-@Tag(name = "客户资金-历史数据查询", description = "新版本 /history -> /customer")
+@Tag(name = "客户资金-历史数据")
 @RestController
 @RequestMapping("/customer")
 public class FundCustomerController {
@@ -40,7 +40,7 @@ public class FundCustomerController {
     @Resource
     private FundCustomerService fundCustomerService;
 
-    @Operation(summary = "获取客户资金列表（分页） | 新版本 入参出参中 fcCode -> code, dptId -> unitId, dptName -> unitName, userName -> createMan")
+    @Operation(summary = "获取客户资金列表（分页）")
     @GetMapping("/list")
     public PageResult<CustomerResVO> pageFundCustomer(
             @Parameter(description = "页码，默认为1") @RequestParam(required = false) Integer pageNum,
@@ -54,7 +54,7 @@ public class FundCustomerController {
         return fundCustomerService.pageFundCustomer(pageNum, pageSize, cond);
     }
 
-    @Operation(summary = "获取客户资金详情 | 新版本 /detail/{id} -> /{id}, dptName -> unitName, sysFile -> files")
+    @Operation(summary = "获取客户资金详情")
     @GetMapping("/{id}")
     public CustomerVO getFundCustomerInfo(@Parameter(description = "页码，默认为1") @PathVariable Integer id) {
         return fundCustomerService.getFundCustomerInfo(id);
@@ -69,7 +69,7 @@ public class FundCustomerController {
         ExcelUtil.export2Web(response, fileName, "客户资金台账数据", CustomerExportVO.class, exportList);
     }
 
-    @Operation(summary = "获取客户资金的流程信息", description = "新版本 /flow/{id} -> /{id}/flow")
+    @Operation(summary = "获取客户资金的流程信息")
     @GetMapping("/{id}/flow")
     public List<NodeInfoVO> getFundCustomerFlow(@PathVariable Long id) {
         return fundCustomerService.getFundCustomerFlow(id);
