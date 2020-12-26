@@ -1,6 +1,7 @@
 package com.hbhb.cw.fundcenter.web.controller;
 
 import com.hbhb.core.utils.ExcelUtil;
+import com.hbhb.cw.flowcenter.vo.NodeInfoVO;
 import com.hbhb.cw.fundcenter.service.FundCustomerService;
 import com.hbhb.cw.fundcenter.web.vo.CustomerExportVO;
 import com.hbhb.cw.fundcenter.web.vo.CustomerReqVO;
@@ -68,9 +69,10 @@ public class FundCustomerController {
         ExcelUtil.export2Web(response, fileName, "客户资金台账数据", CustomerExportVO.class, exportList);
     }
 
-//    @Operation(summary = "获取客户资金的流程信息", description = "新版本 /flow/{id} -> /{id}/flow")
-//    @GetMapping("/{id}/flow")
-//    public List<FlowNodeDisplayVO> getFundCustomerFlow(@PathVariable Long id) {
-//        return fundCustomerService.getFundCustomerFlow(id);
-//    }
+    @Operation(summary = "获取客户资金的流程信息", description = "新版本 /flow/{id} -> /{id}/flow")
+    @GetMapping("/{id}/flow")
+    public List<NodeInfoVO> getFundCustomerFlow(@PathVariable Long id) {
+        return fundCustomerService.getFundCustomerFlow(id);
+    }
 }
+

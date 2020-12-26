@@ -51,12 +51,11 @@ public class FundCustomerStatController {
         return fundCustomerStatService.pageCustomerStat(pageNum, pageSize, cond);
     }
 
-    // todo 接口用于何处？
-//    @Operation(summary = "获取计算客户资金统计数据")
-//    @GetMapping("/statDetail/{id}")
-//    public CustomerStatVO getFundCustomerStatDetail(@PathVariable Long id) {
-//        return fundCustomerStatService.getStatDetail(id);
-//    }
+    @Operation(summary = "获取客户资金统计详细数据")
+    @GetMapping("/detail/{id}")
+    public CustomerStatVO getFundCustomerStatDetail(@PathVariable Long id) {
+        return fundCustomerStatService.getStatDetail(id);
+    }
 
     @Operation(summary = "导出客户资金统计数据 | 新版本 dptId -> unitId, dptName -> unitName")
     @PostMapping("/export")

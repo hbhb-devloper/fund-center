@@ -19,9 +19,6 @@ public class InvoiceReqVO {
     @Schema(description = "单位id")
     private Integer unitId;
 
-    @Schema(description = "父类单位id")
-    private Integer parentId;
-
     @Schema(description = "开票金额")
     private BigDecimal invoiceAmount;
 

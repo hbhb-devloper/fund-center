@@ -1,5 +1,7 @@
 package com.hbhb.cw.fundcenter.web.vo;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +20,6 @@ public class FundInvoiceFlowVO {
     private Long businessId;
     private String flowNodeId;
     private Long flowRoleId;
-    private String approverRole;
     private String nickName;
     private Integer approver;
     private Integer operation;
@@ -27,5 +28,5 @@ public class FundInvoiceFlowVO {
     private Boolean isJoin;
     private Long assigner;
     private String roleDesc;
-    private String updateTime;
+    private Date updateTime;
 }

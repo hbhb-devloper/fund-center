@@ -18,10 +18,10 @@ public interface FundCustomerStatService {
      */
     PageResult<CustomerStatVO> pageCustomerStat(Integer pageNum, Integer pageSize, CustomerStatReqVO cond);
 
-//    /**
-//     * 查询一条数据资金统计
-//     */
-//    CustomerStatVO getStatDetail(Long id);
+    /**
+     * 查询一条数据资金统计
+     */
+    CustomerStatVO getStatDetail(Long id);
 
     /**
      * 客户资金统计数据导出

@@ -5,7 +5,6 @@ import org.beetl.sql.annotation.entity.AutoID;
 import java.io.Serializable;
 import java.util.Date;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,7 @@ public class FundCustomerFlow implements Serializable {
 
     private Long flowRoleId;
 
-    private String userId;
+    private Integer userId;
 
     private String roleDesc;
 

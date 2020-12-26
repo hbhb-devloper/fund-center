@@ -1,5 +1,6 @@
 package com.hbhb.cw.fundcenter.service;
 
+import com.hbhb.cw.flowcenter.vo.NodeInfoVO;
 import com.hbhb.cw.fundcenter.web.vo.CustomerExportVO;
 import com.hbhb.cw.fundcenter.web.vo.CustomerReqVO;
 import com.hbhb.cw.fundcenter.web.vo.CustomerResVO;
@@ -27,8 +28,8 @@ public interface FundCustomerService {
      */
     List<CustomerExportVO> getExportList(CustomerReqVO cond);
 
-//    /**
-//     * 查询客户资金的流程信息
-//     */
-//    List<FlowNodeDisplayVO> getFundCustomerFlow(Long id);
+    /**
+     * 查询客户资金的流程信息
+     */
+    List<NodeInfoVO> getFundCustomerFlow(Long id);
 }

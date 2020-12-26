@@ -8,7 +8,6 @@ import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeTemp;
 import com.hbhb.cw.flowcenter.enums.FlowOperationType;
 import com.hbhb.cw.flowcenter.enums.FlowState;
 import com.hbhb.cw.flowcenter.model.Flow;
-import com.hbhb.cw.flowcenter.vo.FlowApproveVO;
 import com.hbhb.cw.flowcenter.vo.FlowNodePropVO;
 import com.hbhb.cw.flowcenter.vo.FlowToApproveVO;
 import com.hbhb.cw.fundcenter.enums.code.FundErrorCode;
@@ -137,10 +136,6 @@ public class FundInvoiceImpl implements FundInvoiceService {
         FundInvoice fundInvoice = fundInvoiceMapper.single(id);
         InvoiceVO vo = BeanConverter.convert(fundInvoice, InvoiceVO.class);
 
-        // 单位名称
-        Unit unit = unitApi.getUnitInfo(fundInvoice.getUnitId());
-        vo.setUnitName(unit.getUnitName());
-
         // 获取字典
         Map<String, String> businessMap = getBusinessMap();
         Map<String, String> contentMap = getInvoiceContentMap();
@@ -154,7 +149,8 @@ public class FundInvoiceImpl implements FundInvoiceService {
         vo.setAccountTime(DateUtil.dateToString(fundInvoice.getAccountTime()));
         vo.setAccountMoney(fundInvoice.getAccountMoney() == null ? "0.00"
                 : NumberUtil.format(fundInvoice.getAccountMoney().doubleValue()));
-        vo.setInvoiceContent(contentMap.get(fundInvoice.getInvoiceContent().toString()));
+        vo.setInvoiceContent(fundInvoice.getInvoiceContent() == null ? ""
+                : contentMap.get(fundInvoice.getInvoiceContent().toString()));
         vo.setBusiness(businessMap.get(fundInvoice.getBusiness().toString()));
 
         // 获取附件

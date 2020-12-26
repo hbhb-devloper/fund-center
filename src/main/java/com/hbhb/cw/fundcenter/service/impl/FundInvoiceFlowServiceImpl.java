@@ -2,6 +2,7 @@ package com.hbhb.cw.fundcenter.service.impl;
 
 import com.hbhb.api.core.bean.SelectVO;
 import com.hbhb.core.bean.BeanConverter;
+import com.hbhb.core.utils.DateUtil;
 import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeState;
 import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeTemp;
 import com.hbhb.cw.flowcenter.enums.FlowOperationType;
@@ -40,6 +41,7 @@ import com.hbhb.cw.systemcenter.vo.UserInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -259,6 +261,9 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
 
         // 查询流程的所有节点
         List<FundInvoiceFlowVO> flowNodes = this.getFlowNodes(invoiceId);
+        if (CollectionUtils.isEmpty(flowNodes)) {
+            return new FlowWrapperVO();
+        }
         Map<String, FundInvoiceFlowVO> flowNodeMap = flowNodes.stream().collect(
                 Collectors.toMap(FundInvoiceFlowVO::getFlowNodeId, Function.identity()));
 
@@ -349,7 +354,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                     // 此处节点个数有限，循环中使用rpc接口无妨
                     UserInfo userInfo = userApi.getUserInfoById(flow.getUserId());
                     vo.setBusinessId(flow.getInvoiceId());
-                    vo.setApproverRole(flowRoleApi.getNameById(flow.getFlowRoleId()));
+                    vo.setRoleDesc(flowRoleApi.getNameById(flow.getFlowRoleId()));
                     vo.setNickName(userInfo == null ? null : userInfo.getNickName());
                     vo.setApprover(flow.getUserId());
                     return vo;
@@ -398,6 +403,8 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
         boolean operationHidden;
         // 意见是否只读
         boolean suggestionReadOnly;
+        // 是否请求下拉框的数据
+        boolean requestSelectData = true;
         // 可编辑字段
         List<String> filedList = new ArrayList<>();
         switch (type) {
@@ -426,6 +433,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                 approverReadOnly = true;
                 operationHidden = true;
                 suggestionReadOnly = true;
+                requestSelectData = false;
         }
         result.setApprover(NodeApproverVO.builder()
                 .value(flowNode.getApprover())
@@ -439,8 +447,12 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                 .value(flowNode.getSuggestion())
                 .readOnly(suggestionReadOnly)
                 .build());
-        result.setApproverSelect(getApproverSelect(flowNode.getFlowNodeId(), flowNode.getBusinessId()));
-        result.setApproverRole(flowNode.getRoleDesc());
+        // 如果节点已经操作过，则不返回下拉框列表；如果节点未操作，则返回
+        if (requestSelectData && flowNode.getOperation().equals(FlowOperationType.UN_EXECUTED.value())) {
+            result.setApproverSelect(getApproverSelect(flowNode.getFlowNodeId(), flowNode.getBusinessId()));
+        }
+        result.setRoleDesc(flowNode.getRoleDesc());
+        result.setApproveTime(DateUtil.dateToString(flowNode.getUpdateTime()));
         result.setFiledList(filedList);
         return result;
     }

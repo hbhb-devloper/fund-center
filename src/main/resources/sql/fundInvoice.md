@@ -21,11 +21,12 @@ selectPageByCond
         date_format(fi.account_time, '%Y-%m-%d')        as accountTime,
         format(fi.account_money, 2)                     as accountMoney,
         fi.invoice_account                              as invoiceAccount,
-        if(fi.is_cancellation = 1, '是', '否')           as isCancellation,
+        fi.is_cancellation                              as isCancellation,
         fi.billing_number                               as billingNumber,
         count(fif.id) > 0                               as isFile
     -- @}
     from fund_invoice fi
+        left join fund_invoice_file fif on fi.id = fif.invoice_id
         left join unit u on fi.unit_id = u.id
     where fi.delete_flag = 1
     -- @if(isNotEmpty(list)){
@@ -55,8 +56,8 @@ selectPageByCond
     -- @if(isNotEmpty(cond.invoiceNumber)){
         and fi.invoice_number = #{cond.invoiceNumber}
     -- @}
-    group by fi.id, fi.create_time
     -- @pageIgnoreTag(){
+        group by fi.id, fi.create_time
         order by fi.create_time desc
     -- @}
 ```

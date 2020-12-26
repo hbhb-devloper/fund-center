@@ -41,7 +41,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author wxg
  * @since 2020-09-03
  */
-@Tag(name = "客户资金-发票预开 | 新版本 /advance -> /invoice")
+@Tag(name = "客户资金-发票")
 @RestController
 @RequestMapping("/invoice")
 public class FundInvoiceController {
@@ -95,7 +95,7 @@ public class FundInvoiceController {
     @Operation(summary = "发票作废 | 新版本 /cancellation/{id} -> /discard/{id}")
     @PutMapping("/discard/{id}")
     public void updateCancellation(@Parameter(description = "发票id") @PathVariable Long id,
-                                   @Parameter(description = "是否作废") Byte cancellation,
+                                   @Parameter(description = "是否作废") @RequestParam Byte cancellation,
                                    @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceService.discardFundInvoice(id, cancellation, userId);
     }
@@ -143,7 +143,7 @@ public class FundInvoiceController {
     }
 
     @Operation(summary = "获取发票流程 | 新版本 /fund/invoice/flow/list/{invoiceId} -> /fund/invoice/{id}/flows, 出参 InvoiceId -> invoiceId")
-    @GetMapping("/{id}/flows")
+    @GetMapping("/{id}/flow")
     public FlowWrapperVO getInvoiceFlows(@Parameter(description = "id") @PathVariable Long id,
                                          @Parameter(hidden = true) @UserId Integer userId) {
         return fundInvoiceFlowService.getFlowInfo(id, userId);

@@ -31,7 +31,7 @@
 //    /**
 //     * 数据库表名
 //     */
-//    private static final String TABLE_NAME = "fund_customer";
+//    private static final String TABLE_NAME = "fund_customer_group";
 //
 //    public static void main(String[] args) {
 //        // 设置自定义模版路径

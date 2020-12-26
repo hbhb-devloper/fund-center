@@ -74,7 +74,7 @@ public class InvoiceResVO implements Serializable {
     private String state;
 
     @Schema(description = "是否作废")
-    private String isCancellation;
+    private Boolean isCancellation;
 
     @Schema(description = "是否含附件(0-不含,1-含)")
     private Boolean hasFile;

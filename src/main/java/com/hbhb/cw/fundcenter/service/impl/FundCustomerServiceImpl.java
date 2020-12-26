@@ -1,6 +1,11 @@
 package com.hbhb.cw.fundcenter.service.impl;
 
 import com.hbhb.core.bean.BeanConverter;
+import com.hbhb.core.utils.DateUtil;
+import com.hbhb.cw.flowcenter.vo.NodeApproverVO;
+import com.hbhb.cw.flowcenter.vo.NodeInfoVO;
+import com.hbhb.cw.flowcenter.vo.NodeOperationVO;
+import com.hbhb.cw.flowcenter.vo.NodeSuggestionVO;
 import com.hbhb.cw.fundcenter.mapper.FundCustomerFileMapper;
 import com.hbhb.cw.fundcenter.mapper.FundCustomerFlowMapper;
 import com.hbhb.cw.fundcenter.mapper.FundCustomerMapper;
@@ -128,19 +133,33 @@ public class FundCustomerServiceImpl implements FundCustomerService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<FlowNodeDisplayVO> getFundCustomerFlow(Long id) {
-//        List<FundCustomerFlow> customerFlows = fundCustomerFlowMapper.createLambdaQuery()
-//                .andEq(FundCustomerFlow::getCustomerId, id)
-//                .select();
-//        return Optional.ofNullable(customerFlows)
-//                .orElse(new ArrayList<>())
-//                .stream()
-//                .map(flow -> {
-//                    FlowNodeDisplayVO vo = BeanConverter.convert(flow, FlowNodeDisplayVO.class);
-//                    UserInfo userInfo = userApi.getUserInfoById(Integer.valueOf(flow.getUserId()));
-//                    vo.setUserName(userInfo.getNickName());
-//                    return vo;
-//                }).collect(Collectors.toList());
-//    }
+    @Override
+    public List<NodeInfoVO> getFundCustomerFlow(Long id) {
+        List<FundCustomerFlow> customerFlows = fundCustomerFlowMapper.createLambdaQuery()
+                .andEq(FundCustomerFlow::getCustomerId, id)
+                .select();
+        return Optional.ofNullable(customerFlows)
+                .orElse(new ArrayList<>())
+                .stream()
+                .map(flow -> {
+                    NodeInfoVO vo = new NodeInfoVO();
+                    UserInfo userInfo = userApi.getUserInfoById(flow.getUserId());
+                    vo.setApprover(NodeApproverVO.builder()
+                            .value(flow.getUserId())
+                            .readOnly(true)
+                            .build());
+                    vo.setOperation(NodeOperationVO.builder()
+                            .value(flow.getOperation())
+                            .hidden(true)
+                            .build());
+                    vo.setSuggestion(NodeSuggestionVO.builder()
+                            .value(flow.getSuggestion())
+                            .readOnly(true)
+                            .build());
+                    vo.setRoleDesc(flow.getRoleDesc());
+                    vo.setNickName(userInfo.getNickName());
+                    vo.setApproveTime(DateUtil.dateToString(flow.getCreateTime()));
+                    return vo;
+                }).collect(Collectors.toList());
+    }
 }
