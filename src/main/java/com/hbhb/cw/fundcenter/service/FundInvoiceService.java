@@ -46,7 +46,7 @@ public interface FundInvoiceService {
     /**
      * 发票作废
      */
-    void discardFundInvoice(Long id, Byte cancellation, Integer userId);
+    void discardFundInvoice(Long id, Boolean cancellation, Integer userId);
 
     /**
      * 删除发票信息

@@ -240,7 +240,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
     }
 
     @Override
-    public void discardFundInvoice(Long id, Byte cancellation, Integer userId) {
+    public void discardFundInvoice(Long id, Boolean cancellation, Integer userId) {
         // 只有“发票作废员”才有权限作废发票
         List<String> roleNameList = flowRoleUserApi.getRoleNameByUserId(userId);
         if (!roleNameList.contains("发票作废员")) {

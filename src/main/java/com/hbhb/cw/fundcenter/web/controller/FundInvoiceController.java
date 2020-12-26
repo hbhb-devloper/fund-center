@@ -95,7 +95,7 @@ public class FundInvoiceController {
     @Operation(summary = "发票作废")
     @PutMapping("/discard/{id}")
     public void updateCancellation(@Parameter(description = "发票id") @PathVariable Long id,
-                                   @Parameter(description = "是否作废") @RequestParam Byte cancellation,
+                                   @Parameter(description = "是否作废") @RequestParam Boolean cancellation,
                                    @Parameter(hidden = true) @UserId Integer userId) {
         fundInvoiceService.discardFundInvoice(id, cancellation, userId);
     }

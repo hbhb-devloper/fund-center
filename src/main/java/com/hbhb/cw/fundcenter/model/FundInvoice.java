@@ -55,7 +55,7 @@ public class FundInvoice implements Serializable {
 
     private String invoiceAccount;
 
-    private Byte isCancellation;
+    private Boolean isCancellation;
 
     private String billingNumber;
 

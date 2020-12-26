@@ -105,7 +105,7 @@ public class FundInvoiceNoticeServiceImpl implements FundInvoiceNoticeService {
     public Long countNotice(Integer userId) {
         return fundInvoiceNoticeMapper.createLambdaQuery()
                 .andEq(FundInvoiceNotice::getReceiver, userId)
-                .andEq(FundInvoiceNotice::getState, InvoiceNoticeState.UN_READ)
+                .andEq(FundInvoiceNotice::getState, InvoiceNoticeState.UN_READ.value())
                 .count();
     }
 }
