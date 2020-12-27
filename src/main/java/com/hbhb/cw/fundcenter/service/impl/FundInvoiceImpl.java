@@ -299,7 +299,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
         FundInvoice invoice = fundInvoiceMapper.single(invoiceId);
         // 1.判断登录用户是否与发票客户经理一致
         UserInfo user = userApi.getUserInfoById(vo.getUserId());
-        if (!user.getNickName().equals(invoice.getClientManager())) {
+        if (!invoice.getClientManager().equals(user.getNickName())) {
             throw new FundFlowException(FundFlowErrorCode.LACK_OF_FLOW_ROLE);
         }
         // 1.1 客户经理判断发票是否符合要求
