@@ -57,7 +57,7 @@ public class FundInvoiceNoticeController implements NoticeApi {
     }
 
     @Operation(summary = "获取登录用户的待办提醒")
-    @GetMapping("/home")
+    @GetMapping("/summary")
     public List<FundInvoiceNoticeVO> getUserInvoiceNotice(@Parameter(hidden = true) @UserId Integer userId) {
         return fundInvoiceNoticeService.listInvoiceNotice(userId);
     }
