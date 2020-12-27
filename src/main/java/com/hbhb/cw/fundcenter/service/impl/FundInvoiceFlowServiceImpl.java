@@ -17,6 +17,7 @@ import com.hbhb.cw.flowcenter.vo.NodeOperationVO;
 import com.hbhb.cw.flowcenter.vo.NodeSuggestionVO;
 import com.hbhb.cw.fundcenter.enums.InvoiceNoticeState;
 import com.hbhb.cw.fundcenter.enums.NodeAccessFiled;
+import com.hbhb.cw.fundcenter.enums.Suggestion;
 import com.hbhb.cw.fundcenter.enums.code.FundErrorCode;
 import com.hbhb.cw.fundcenter.enums.code.FundFlowErrorCode;
 import com.hbhb.cw.fundcenter.exception.FundException;
@@ -185,6 +186,9 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
             }
             // 3-3.提醒发起人
             String inform = flowNodeNoticeApi.getInform(currentNodeId, FlowNodeNoticeState.COMPLETE_REMINDER.value());
+            if (inform == null) {
+                inform = Suggestion.AGREE.value();
+            }
             String content = inform.replace(FlowNodeNoticeTemp.TITLE.value(), title)
                     .replace(FlowNodeNoticeTemp.APPROVE.value(), userInfo.getNickName());
             this.saveNotice(invoiceId, approvers.get(0).getUserId(), userId, content, flowTypeId, now);
@@ -195,6 +199,9 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
             flowState = FlowState.APPROVE_REJECTED.value();
             // 提醒发起人
             String inform = flowNodeNoticeApi.getInform(currentNodeId, FlowNodeNoticeState.REJECT_REMINDER.value());
+            if (inform == null) {
+                inform = Suggestion.REFUSE.value();
+            }
             String content = inform.replace(FlowNodeNoticeTemp.TITLE.value(), title)
                     .replace(FlowNodeNoticeTemp.APPROVE.value(), userInfo.getNickName())
                     .replace(FlowNodeNoticeTemp.CAUSE.value(), approveVO.getSuggestion());
