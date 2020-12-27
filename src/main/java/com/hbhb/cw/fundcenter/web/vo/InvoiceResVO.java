@@ -70,8 +70,11 @@ public class InvoiceResVO implements Serializable {
     @Schema(description = "开票时间:yyyy-MM-dd")
     private String invoiceCreateTime;
 
+    @Schema(description = "流程状态值")
+    private Integer state;
+
     @Schema(description = "流程状态")
-    private String state;
+    private String stateLabel;
 
     @Schema(description = "是否作废")
     private Boolean isCancellation;

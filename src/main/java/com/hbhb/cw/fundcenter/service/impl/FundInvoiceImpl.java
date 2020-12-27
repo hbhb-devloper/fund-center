@@ -126,7 +126,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
         page.getList().forEach(vo -> {
             vo.setInvoiceContent(contentMap.get(vo.getInvoiceContent()));
             vo.setBusiness(businessMap.get(vo.getBusiness()));
-            vo.setState(stateMap.get(vo.getState()));
+            vo.setStateLabel(stateMap.get(vo.getState().toString()));
         });
         return page;
     }
