@@ -463,15 +463,14 @@ public class FundInvoiceImpl implements FundInvoiceService {
      * 组装发票实体
      */
     private FundInvoice buildInvoice(InvoiceVO vo, UserInfo userInfo) {
-        // todo 此处判断所为何？
         if (!userInfo.getNickName().equals(vo.getInvoiceUser())) {
-            throw new FundException(FundErrorCode.FUND_INVOICE_USER_INCORRECT);
-        }
-        if (!StringUtils.isEmpty(vo.getAccountMoney())
-                || !StringUtils.isEmpty(vo.getAccountTime())
-                || !StringUtils.isEmpty(vo.getInvoiceNumber())
-                || !StringUtils.isEmpty(vo.getVersions())) {
-            throw new FundException(FundErrorCode.FUND_INVOICE_HAS_NO_WRITE_ACCESS);
+            // 如果登录用户不是开票人，且以下字段被填写，则抛出异常
+            if (!StringUtils.isEmpty(vo.getAccountMoney())
+                    || !StringUtils.isEmpty(vo.getAccountTime())
+                    || !StringUtils.isEmpty(vo.getInvoiceNumber())
+                    || !StringUtils.isEmpty(vo.getVersions())) {
+                throw new FundException(FundErrorCode.FUND_INVOICE_HAS_NO_WRITE_ACCESS);
+            }
         }
 
         FundInvoice invoice = BeanConverter.convert(vo, FundInvoice.class);
