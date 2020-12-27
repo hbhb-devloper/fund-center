@@ -75,7 +75,7 @@ public class FundInvoiceNoticeServiceImpl implements FundInvoiceNoticeService {
     public List<FundInvoiceNoticeVO> listInvoiceNotice(Integer userId) {
         List<FundInvoiceNotice> list = fundInvoiceNoticeMapper.createLambdaQuery()
                 .andEq(FundInvoiceNotice::getReceiver, userId)
-                .andEq(FundInvoiceNotice::getState, InvoiceNoticeState.UN_READ)
+                .andEq(FundInvoiceNotice::getState, InvoiceNoticeState.UN_READ.value())
                 .desc(FundInvoiceNotice::getCreateTime)
                 .select();
         if (CollectionUtils.isEmpty(list)) {
