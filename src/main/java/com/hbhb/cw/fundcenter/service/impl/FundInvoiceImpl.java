@@ -463,6 +463,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
      * 组装发票实体
      */
     private FundInvoice buildInvoice(InvoiceVO vo, UserInfo userInfo) {
+        // todo 此处判断所为何？
         if (!userInfo.getNickName().equals(vo.getInvoiceUser())) {
             throw new FundException(FundErrorCode.FUND_INVOICE_USER_INCORRECT);
         }
