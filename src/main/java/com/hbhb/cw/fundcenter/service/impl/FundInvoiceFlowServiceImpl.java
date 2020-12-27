@@ -470,6 +470,8 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
         // 如果节点已经操作过，则不返回下拉框列表；如果节点未操作，则返回
         if (requestSelectData && flowNode.getOperation().equals(FlowOperationType.UN_EXECUTED.value())) {
             result.setApproverSelect(getApproverSelect(flowNode.getFlowNodeId(), flowNode.getBusinessId()));
+        } else {
+            result.setApproverSelect(new ArrayList<>());
         }
         result.setRoleDesc(flowNode.getRoleDesc());
         result.setApproveTime(DateUtil.dateToString(flowNode.getUpdateTime()));
