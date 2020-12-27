@@ -212,14 +212,13 @@ public class FundInvoiceImpl implements FundInvoiceService {
     public void updateFundInvoiceExtra(FundInvoiceExtraVO vo, Integer userId) {
         UserInfo userInfo = userApi.getUserInfoById(userId);
         FundInvoice fundInvoice = fundInvoiceMapper.single(vo.getId());
-        if (!fundInvoice.getInvoiceUser().equals(userInfo.getNickName())) {
-            throw new FundException(FundErrorCode.FUND_INVOICE_HAS_NO_WRITE_ACCESS);
-        }
-
         FundInvoice invoice = new FundInvoice();
         invoice.setId(vo.getId());
         // 如果是流程已完成，则补充该两个字段
         if (fundInvoice.getState().equals(FlowState.APPROVED.value())) {
+            if (!fundInvoice.getInvoiceUser().equals(userInfo.getNickName())) {
+                throw new FundException(FundErrorCode.FUND_INVOICE_HAS_NO_WRITE_ACCESS);
+            }
             // 到账金额
             invoice.setAccountMoney(new BigDecimal(vo.getAccountMoney()));
             // 到账时间
