@@ -158,12 +158,20 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                     if (approvers.stream().anyMatch(vo -> vo.getUserId() == null)) {
                         throw new FundFlowException(FundFlowErrorCode.NOT_ALL_APPROVERS_ASSIGNED);
                     }
+                    List<FundInvoiceFlow> list = new ArrayList<>();
+                    for(NodeApproverReqVO a :approvers) {
+                        FundInvoiceFlow flows = new FundInvoiceFlow();
+                        flows.setId(a.getId());
+                        flows.setUserId(a.getUserId());
+                        list.add(flows);
+                    }
                     // 更新各节点审批人
-                    fundInvoiceFlowMapper.updateBatchTempById(approvers.stream().map(vo ->
-                            FundInvoiceFlow.builder()
-                                    .id(vo.getId())
-                                    .userId(vo.getUserId())
-                                    .build()).collect(Collectors.toList()));
+                    fundInvoiceFlowMapper.updateBatchTempById(list);
+//                    fundInvoiceFlowMapper.updateBatchTempById(approvers.stream().map(vo ->
+//                            FundInvoiceFlow.builder()
+//                                    .id(vo.getId())
+//                                    .userId(vo.getUserId())
+//                                    .build()).collect(Collectors.toList()));
                 }
                 // 2-2.如果不是分配者
                 else {
