@@ -39,7 +39,6 @@ import org.beetl.sql.core.page.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -156,7 +155,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
     @Transactional(rollbackFor = Exception.class)
     public void addFundInvoice(InvoiceVO vo, Integer userId) {
         UserInfo userInfo = userApi.getUserInfoById(userId);
-        FundInvoice invoice = buildInvoice(vo, userInfo);
+        FundInvoice invoice = buildInvoice(vo);
         // 客户经理
         invoice.setClientManager(userInfo.getNickName());
         // 单位id
@@ -175,11 +174,11 @@ public class FundInvoiceImpl implements FundInvoiceService {
         UserInfo userInfo = userApi.getUserInfoById(userId);
         String nickName = userInfo.getNickName();
         FundInvoice invoice = fundInvoiceMapper.single(vo.getId());
-        // todo 客户经理和开票人只能修改对应的字段
-//        if (!nickName.equals(invoice.getClientManager()) && !nickName.equals(invoice.getInvoiceUser())) {
-//            throw new FundException(FundErrorCode.FUND_INVOICE_PERMISSION_DENIED);
-//        }
-        FundInvoice invoiceInfo = buildInvoice(vo, userInfo);
+        // 校验是否为客户经理
+        if (!nickName.equals(invoice.getClientManager())) {
+            throw new FundException(FundErrorCode.FUND_INVOICE_PERMISSION_DENIED);
+        }
+        FundInvoice invoiceInfo = buildInvoice(vo);
         fundInvoiceMapper.updateTemplateById(invoiceInfo);
         // 修改附件
         if (vo.getFiles() != null && vo.getFiles().size() != 0) {
@@ -440,17 +439,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
     /**
      * 组装发票实体
      */
-    private FundInvoice buildInvoice(InvoiceVO vo, UserInfo userInfo) {
-        if (!userInfo.getNickName().equals(vo.getInvoiceUser())) {
-            // 如果登录用户不是开票人，且以下字段被填写，则抛出异常
-            if (!StringUtils.isEmpty(vo.getAccountMoney())
-                    || !StringUtils.isEmpty(vo.getAccountTime())
-                    || !StringUtils.isEmpty(vo.getInvoiceNumber())
-                    || !StringUtils.isEmpty(vo.getVersions())) {
-                throw new FundException(FundErrorCode.FUND_INVOICE_HAS_NO_WRITE_ACCESS);
-            }
-        }
-
+    private FundInvoice buildInvoice(InvoiceVO vo) {
         FundInvoice invoice = BeanConverter.convert(vo, FundInvoice.class);
         invoice.setInvoiceAmount(new BigDecimal(vo.getInvoiceAmount()));
         invoice.setBusiness(Integer.valueOf(vo.getBusiness()));
