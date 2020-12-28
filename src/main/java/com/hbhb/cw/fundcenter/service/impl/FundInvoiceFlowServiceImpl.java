@@ -166,7 +166,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                 // 3.保存提醒消息
                 // 3-1.提醒下一个节点的审批人
                 String inform = flowNodeNoticeApi.getInform(currentNodeId, FlowNodeNoticeState.DEFAULT_REMINDER.value());
-                this.saveNotice(invoiceId, next, userId,
+                this.saveNotice(invoiceId, next, approvers.get(0).getUserId(),
                         inform.replace(FlowNodeNoticeTemp.TITLE.value(), title), flowTypeId, now);
                 // 3-2.邮件推送
                 if (mailEnable) {
