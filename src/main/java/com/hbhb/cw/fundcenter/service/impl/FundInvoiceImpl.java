@@ -116,7 +116,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
         InvoiceVO vo = BeanConverter.convert(fundInvoice, InvoiceVO.class);
 
         // 获取字典
-        Map<String, String> businessMap = getBusinessMap();
+//        Map<String, String> businessMap = getBusinessMap();
         Map<String, String> contentMap = getInvoiceContentMap();
 
         // 金额日期字段格式化处理
@@ -130,7 +130,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
                 : NumberUtil.format(fundInvoice.getAccountMoney().doubleValue()));
         vo.setInvoiceContent(fundInvoice.getInvoiceContent() == null ? ""
                 : contentMap.get(fundInvoice.getInvoiceContent().toString()));
-        vo.setBusiness(businessMap.get(fundInvoice.getBusiness().toString()));
+        vo.setBusiness(fundInvoice.getBusiness().toString());
 
         // 获取附件
         List<InvoiceFileVO> files = new ArrayList<>();
