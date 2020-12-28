@@ -22,22 +22,9 @@ import com.hbhb.cw.fundcenter.model.FundInvoice;
 import com.hbhb.cw.fundcenter.model.FundInvoiceFile;
 import com.hbhb.cw.fundcenter.model.FundInvoiceFlow;
 import com.hbhb.cw.fundcenter.model.FundInvoiceNotice;
-import com.hbhb.cw.fundcenter.rpc.DictApiExp;
-import com.hbhb.cw.fundcenter.rpc.FileApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowNodeApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowNodeNoticeApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowNodePropApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowRoleUserApiExp;
-import com.hbhb.cw.fundcenter.rpc.UnitApiExp;
-import com.hbhb.cw.fundcenter.rpc.UserApiExp;
+import com.hbhb.cw.fundcenter.rpc.*;
 import com.hbhb.cw.fundcenter.service.FundInvoiceService;
-import com.hbhb.cw.fundcenter.web.vo.FundInvoiceExtraVO;
-import com.hbhb.cw.fundcenter.web.vo.InvoiceExportVO;
-import com.hbhb.cw.fundcenter.web.vo.InvoiceFileVO;
-import com.hbhb.cw.fundcenter.web.vo.InvoiceReqVO;
-import com.hbhb.cw.fundcenter.web.vo.InvoiceResVO;
-import com.hbhb.cw.fundcenter.web.vo.InvoiceVO;
+import com.hbhb.cw.fundcenter.web.vo.*;
 import com.hbhb.cw.systemcenter.enums.DictCode;
 import com.hbhb.cw.systemcenter.enums.TypeCode;
 import com.hbhb.cw.systemcenter.enums.UnitEnum;
@@ -45,7 +32,7 @@ import com.hbhb.cw.systemcenter.model.SysFile;
 import com.hbhb.cw.systemcenter.model.Unit;
 import com.hbhb.cw.systemcenter.vo.DictVO;
 import com.hbhb.cw.systemcenter.vo.UserInfo;
-
+import lombok.extern.slf4j.Slf4j;
 import org.beetl.sql.core.page.DefaultPageRequest;
 import org.beetl.sql.core.page.PageRequest;
 import org.beetl.sql.core.page.PageResult;
@@ -54,18 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
-
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wxg
@@ -497,8 +476,8 @@ public class FundInvoiceImpl implements FundInvoiceService {
         List<FundInvoiceFile> invoiceFiles = fundInvoiceFileMapper.createLambdaQuery()
                 .andEq(FundInvoiceFile::getInvoiceId, invoiceId)
                 .select(FundInvoiceFile::getId);
-        // 如果不存在，则不用新增
-        if (CollectionUtils.isEmpty(invoiceFiles)) {
+        // 如果存在，则不用新增
+        if (!CollectionUtils.isEmpty(invoiceFiles)) {
             return;
         }
         List<Long> fileIds = invoiceFiles.stream().map(FundInvoiceFile::getId).collect(Collectors.toList());
