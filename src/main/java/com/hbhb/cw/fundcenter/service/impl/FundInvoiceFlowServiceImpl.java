@@ -204,7 +204,6 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                 .updateTime(now)
                 .id(approveVO.getId())
                 .build());
-
         // 更新流程状态
         if (flowState != null) {
             fundInvoiceMapper.updateTemplateById(
