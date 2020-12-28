@@ -32,3 +32,8 @@ selectPageByCond
         order by fin.create_time desc, fin.state
     -- @}
 ```
+updateStateByInvoiceId
+===
+```sql
+update fund_invoice_notice set state =#{state} where invoice_id = #{invoiceId} 
+```

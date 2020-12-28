@@ -7,14 +7,7 @@ import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeState;
 import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeTemp;
 import com.hbhb.cw.flowcenter.enums.FlowOperationType;
 import com.hbhb.cw.flowcenter.enums.FlowState;
-import com.hbhb.cw.flowcenter.vo.FlowApproveVO;
-import com.hbhb.cw.flowcenter.vo.FlowWrapperVO;
-import com.hbhb.cw.flowcenter.vo.NodeApproverReqVO;
-import com.hbhb.cw.flowcenter.vo.NodeApproverVO;
-import com.hbhb.cw.flowcenter.vo.NodeInfoVO;
-import com.hbhb.cw.flowcenter.vo.NodeOperationReqVO;
-import com.hbhb.cw.flowcenter.vo.NodeOperationVO;
-import com.hbhb.cw.flowcenter.vo.NodeSuggestionVO;
+import com.hbhb.cw.flowcenter.vo.*;
 import com.hbhb.cw.fundcenter.enums.InvoiceNoticeState;
 import com.hbhb.cw.fundcenter.enums.NodeAccessFiled;
 import com.hbhb.cw.fundcenter.enums.Suggestion;
@@ -28,35 +21,22 @@ import com.hbhb.cw.fundcenter.mapper.FundInvoiceNoticeMapper;
 import com.hbhb.cw.fundcenter.model.FundInvoice;
 import com.hbhb.cw.fundcenter.model.FundInvoiceFlow;
 import com.hbhb.cw.fundcenter.model.FundInvoiceNotice;
-import com.hbhb.cw.fundcenter.rpc.FlowApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowNodeNoticeApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowRoleApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowRoleUserApiExp;
-import com.hbhb.cw.fundcenter.rpc.FlowTypeApiExp;
-import com.hbhb.cw.fundcenter.rpc.UserApiExp;
+import com.hbhb.cw.fundcenter.rpc.*;
 import com.hbhb.cw.fundcenter.service.FundInvoiceFlowService;
 import com.hbhb.cw.fundcenter.service.MailService;
 import com.hbhb.cw.fundcenter.web.vo.FundInvoiceFlowVO;
 import com.hbhb.cw.systemcenter.vo.UserInfo;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.annotation.Resource;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author wxg
@@ -128,10 +108,12 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
         Integer flowState = null;
 
         // 更新当前节点之前的所有节点提醒状态为已读
-        fundInvoiceNoticeMapper.updateTemplateById(FundInvoiceNotice.builder()
-                .id(invoiceId)
-                .state(InvoiceNoticeState.READ.value())
-                .build());
+        fundInvoiceNoticeMapper.updateStateByInvoiceId(invoiceId, InvoiceNoticeState.READ.value());
+
+//                updateTemplateById(FundInvoiceNotice.builder()
+//                .id(invoiceId)
+//                .state(InvoiceNoticeState.READ.value())
+//                .build());
 
         // 同意
         if (FlowOperationType.AGREE.value().equals(approveVO.getOperation())) {
@@ -194,12 +176,11 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
             }
             // 3-3.提醒发起人
             String inform = flowNodeNoticeApi.getInform(currentNodeId, FlowNodeNoticeState.COMPLETE_REMINDER.value());
-            if (inform == null) {
-                inform = Suggestion.AGREE.value();
+            if (inform != null) {
+                String content = inform.replace(FlowNodeNoticeTemp.TITLE.value(), title)
+                        .replace(FlowNodeNoticeTemp.APPROVE.value(), userInfo.getNickName());
+                this.saveNotice(invoiceId, approvers.get(0).getUserId(), userId, content, flowTypeId, now);
             }
-            String content = inform.replace(FlowNodeNoticeTemp.TITLE.value(), title)
-                    .replace(FlowNodeNoticeTemp.APPROVE.value(), userInfo.getNickName());
-            this.saveNotice(invoiceId, approvers.get(0).getUserId(), userId, content, flowTypeId, now);
         }
         // 拒绝
         else if (approveVO.getOperation().equals(FlowOperationType.REJECT.value())) {
@@ -450,7 +431,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                 break;
             // 审批节点（收账员）
             case 3:
-                approverReadOnly = isCurrentNode;
+                approverReadOnly = true;
                 operationHidden = !isCurrentNode;
                 suggestionReadOnly = !isCurrentNode;
                 filedList.addAll(Arrays.asList(StringUtils.commaDelimitedListToStringArray(
