@@ -22,9 +22,22 @@ import com.hbhb.cw.fundcenter.model.FundInvoice;
 import com.hbhb.cw.fundcenter.model.FundInvoiceFile;
 import com.hbhb.cw.fundcenter.model.FundInvoiceFlow;
 import com.hbhb.cw.fundcenter.model.FundInvoiceNotice;
-import com.hbhb.cw.fundcenter.rpc.*;
+import com.hbhb.cw.fundcenter.rpc.DictApiExp;
+import com.hbhb.cw.fundcenter.rpc.FileApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowNodeApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowNodeNoticeApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowNodePropApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowRoleUserApiExp;
+import com.hbhb.cw.fundcenter.rpc.UnitApiExp;
+import com.hbhb.cw.fundcenter.rpc.UserApiExp;
 import com.hbhb.cw.fundcenter.service.FundInvoiceService;
-import com.hbhb.cw.fundcenter.web.vo.*;
+import com.hbhb.cw.fundcenter.web.vo.FundInvoiceExtraVO;
+import com.hbhb.cw.fundcenter.web.vo.InvoiceExportVO;
+import com.hbhb.cw.fundcenter.web.vo.InvoiceFileVO;
+import com.hbhb.cw.fundcenter.web.vo.InvoiceReqVO;
+import com.hbhb.cw.fundcenter.web.vo.InvoiceResVO;
+import com.hbhb.cw.fundcenter.web.vo.InvoiceVO;
 import com.hbhb.cw.systemcenter.enums.DictCode;
 import com.hbhb.cw.systemcenter.enums.TypeCode;
 import com.hbhb.cw.systemcenter.enums.UnitEnum;
@@ -42,7 +55,12 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -441,6 +459,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
      */
     private FundInvoice buildInvoice(InvoiceVO vo) {
         FundInvoice invoice = BeanConverter.convert(vo, FundInvoice.class);
+        invoice.setInvoiceContent(Integer.parseInt(vo.getInvoiceContent()));
         invoice.setInvoiceAmount(new BigDecimal(vo.getInvoiceAmount()));
         invoice.setBusiness(Integer.valueOf(vo.getBusiness()));
         // 办理业务类型为欠费缴纳时，两个字段必需
