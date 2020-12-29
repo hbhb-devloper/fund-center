@@ -133,8 +133,8 @@ public class FundInvoiceImpl implements FundInvoiceService {
         InvoiceVO vo = BeanConverter.convert(fundInvoice, InvoiceVO.class);
 
         // 获取字典
-//        Map<String, String> businessMap = getBusinessMap();
-        Map<String, String> contentMap = getInvoiceContentMap();
+        //    Map<String, String> businessMap = getBusinessMap();
+        //    Map<String, String> contentMap = getInvoiceContentMap();
 
         // 金额日期字段格式化处理
         vo.setInvoiceAmount(fundInvoice.getInvoiceAmount() == null ? "0.00"
@@ -145,8 +145,8 @@ public class FundInvoiceImpl implements FundInvoiceService {
         vo.setAccountTime(DateUtil.dateToString(fundInvoice.getAccountTime()));
         vo.setAccountMoney(fundInvoice.getAccountMoney() == null ? "0.00"
                 : NumberUtil.format(fundInvoice.getAccountMoney().doubleValue()));
-        vo.setInvoiceContent(fundInvoice.getInvoiceContent() == null ? ""
-                : contentMap.get(fundInvoice.getInvoiceContent().toString()));
+        vo.setInvoiceContent(fundInvoice.getInvoiceContent() == null ? "" :
+                fundInvoice.getInvoiceContent().toString());
         vo.setBusiness(fundInvoice.getBusiness().toString());
 
         // 获取附件
