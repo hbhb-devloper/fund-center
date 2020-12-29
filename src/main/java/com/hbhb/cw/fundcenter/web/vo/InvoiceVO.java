@@ -1,13 +1,14 @@
 package com.hbhb.cw.fundcenter.web.vo;
 
-import java.io.Serializable;
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author wxg
@@ -26,7 +27,7 @@ public class InvoiceVO implements Serializable {
     private String clientManager;
 
     @Schema(description = "开票金额")
-    private String invoiceAmount;
+    private BigDecimal invoiceAmount;
 
     @Schema(description = "发票账户")
     private String invoiceAccount;

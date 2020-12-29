@@ -137,8 +137,6 @@ public class FundInvoiceImpl implements FundInvoiceService {
         //    Map<String, String> contentMap = getInvoiceContentMap();
 
         // 金额日期字段格式化处理
-        vo.setInvoiceAmount(fundInvoice.getInvoiceAmount() == null ? "0.00"
-                : NumberUtil.format(fundInvoice.getInvoiceAmount().doubleValue()));
         vo.setArrearageMonth(DateUtil.dateToStringYmd(fundInvoice.getArrearageMonth()));
         vo.setArrearageMoney(fundInvoice.getArrearageMoney() == null ? "0.00"
                 : NumberUtil.format(fundInvoice.getArrearageMoney().doubleValue()));
@@ -460,7 +458,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
     private FundInvoice buildInvoice(InvoiceVO vo) {
         FundInvoice invoice = BeanConverter.convert(vo, FundInvoice.class);
         invoice.setInvoiceContent(Integer.parseInt(vo.getInvoiceContent()));
-        invoice.setInvoiceAmount(new BigDecimal(vo.getInvoiceAmount()));
+        invoice.setInvoiceAmount(vo.getInvoiceAmount());
         invoice.setBusiness(Integer.valueOf(vo.getBusiness()));
         // 办理业务类型为欠费缴纳时，两个字段必需
         if (invoice.getBusiness() == 20) {
