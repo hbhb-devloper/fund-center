@@ -5,7 +5,9 @@ import com.hbhb.cw.fundcenter.service.FundCustomerStatService;
 import com.hbhb.cw.fundcenter.web.vo.CustomerStatExportVO;
 import com.hbhb.cw.fundcenter.web.vo.CustomerStatReqVO;
 import com.hbhb.cw.fundcenter.web.vo.CustomerStatVO;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.beetl.sql.core.page.DefaultPageResult;
 import org.beetl.sql.core.page.PageResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 
 /**
  * @author tpson
@@ -63,6 +60,6 @@ public class FundCustomerStatController {
                        @RequestBody CustomerStatReqVO cond) {
         List<CustomerStatExportVO> exportList = fundCustomerStatService.getExportList(cond);
         String fileName = ExcelUtil.encodingFileName(request, "客户资金台账数据统计表");
-        ExcelUtil.export2Web(response, fileName, "客户资金台账统计数据", CustomerStatVO.class, exportList);
+        ExcelUtil.export2Web(response, fileName, "客户资金台账统计数据", CustomerStatExportVO.class, exportList);
     }
 }

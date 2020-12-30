@@ -41,7 +41,7 @@ selectPageByCond
     -- @if(isNotEmpty(cond.state)){
         and fi.state = #{cond.state}
     -- @}
-    -- @if(isNotEmpty(cond.clientManager)){
+    -- @if(isNotEmpty(cond.clientManager) && cond.clientManager !='' ){
         and fi.client_manager = #{cond.clientManager}
     -- @}
     -- @if(isNotEmpty(cond.isCancellation)){

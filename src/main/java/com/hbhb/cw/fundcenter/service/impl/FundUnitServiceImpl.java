@@ -7,20 +7,17 @@ import com.hbhb.cw.fundcenter.model.FundUnit;
 import com.hbhb.cw.fundcenter.service.FundUnitService;
 import com.hbhb.cw.fundcenter.web.vo.FundUnitImportVO;
 import com.hbhb.cw.fundcenter.web.vo.FundUnitVO;
-
+import lombok.extern.slf4j.Slf4j;
 import org.beetl.sql.core.page.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.annotation.Resource;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author wangxiaodang
@@ -122,13 +119,15 @@ public class FundUnitServiceImpl implements FundUnitService {
             info.add(item.getUnitCode());
             info.add(item.getUnitName());
         });
+        int i = 2;
         for (FundUnit unit : insertList) {
             if (info.contains(unit.getUnitCode())) {
-                errorList.add("单位编号：" + unit.getUnitCode() + "已存在");
+                errorList.add("在excel第" + i + "行单位编号：" + unit.getUnitCode() + "已存在");
             }
             if (info.contains(unit.getUnitName())) {
-                errorList.add("单位名称：" + unit.getUnitName() + "已存在");
+                errorList.add("在excel第" + i + "行单位名称：" + unit.getUnitName() + "已存在");
             }
+            i++;
         }
 
         msg.clear();

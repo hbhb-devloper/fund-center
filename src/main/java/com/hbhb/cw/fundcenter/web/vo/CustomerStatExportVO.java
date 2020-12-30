@@ -1,22 +1,20 @@
 package com.hbhb.cw.fundcenter.web.vo;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.ContentStyle;
 import com.alibaba.excel.annotation.write.style.HeadFontStyle;
 import com.alibaba.excel.annotation.write.style.HeadStyle;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -26,6 +24,7 @@ public class CustomerStatExportVO implements Serializable {
 
     private static final long serialVersionUID = -511249135896611529L;
 
+    @ExcelIgnore
     private Long id;
 
     @ColumnWidth(30)
@@ -74,7 +73,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal beginAmount;
+    private String beginAmount;
 
 
     @ExcelProperty(value = "本期增加", index = 5)
@@ -84,7 +83,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal addAmount;
+    private String addAmount;
 
 
     @ExcelProperty(value = "核销收款", index = 6)
@@ -94,7 +93,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal verifyAmount;
+    private String verifyAmount;
 
 
     @ExcelProperty(value = "本期减少", index = 7)
@@ -104,7 +103,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal reduceAmount;
+    private String reduceAmount;
 
 
     @ExcelProperty(value = "本期收款冻结", index = 8)
@@ -114,7 +113,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal collectionFrozen;
+    private String collectionFrozen;
 
 
     @ExcelProperty(value = "本期使用冻结", index = 9)
@@ -124,7 +123,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal useFrozen;
+    private String useFrozen;
 
 
     @ExcelProperty(value = "本期退款冻结", index = 10)
@@ -134,7 +133,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal refundFrozen;
+    private String refundFrozen;
 
 
     @ExcelProperty(value = "本期退款", index = 11)
@@ -144,7 +143,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal refund;
+    private String refund;
 
 
     @ExcelProperty(value = "本期余额", index = 12)
@@ -154,7 +153,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal balance;
+    private String balance;
 
 
     @ExcelProperty(value = "积累开票金额", index = 13)
@@ -164,7 +163,7 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal totalInvoiceAmount;
+    private String totalInvoiceAmount;
 
 
     @ExcelProperty(value = "积累入账金额", index = 14)
@@ -174,5 +173,5 @@ public class CustomerStatExportVO implements Serializable {
             borderLeft = BorderStyle.NONE, borderRight = BorderStyle.NONE,
             borderTop = BorderStyle.NONE, borderBottom = BorderStyle.NONE)
     @ContentStyle(horizontalAlignment = HorizontalAlignment.CENTER)
-    private BigDecimal totalEnterAmount;
+    private String totalEnterAmount;
 }

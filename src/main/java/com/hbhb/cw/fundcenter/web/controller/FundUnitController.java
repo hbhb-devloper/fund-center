@@ -2,15 +2,21 @@ package com.hbhb.cw.fundcenter.web.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.hbhb.core.utils.ExcelUtil;
 import com.hbhb.cw.fundcenter.enums.code.FundUnitErrorCode;
 import com.hbhb.cw.fundcenter.exception.FundUnitException;
 import com.hbhb.cw.fundcenter.model.FundUnit;
 import com.hbhb.cw.fundcenter.service.FundUnitService;
 import com.hbhb.cw.fundcenter.service.listener.FundUnitListener;
+import com.hbhb.cw.fundcenter.web.vo.FundUnitExportVO;
 import com.hbhb.cw.fundcenter.web.vo.FundUnitImportVO;
 import com.hbhb.cw.fundcenter.web.vo.FundUnitVO;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.beetl.sql.core.page.PageResult;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,17 +24,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 import javax.annotation.Resource;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author wangxiaogang
@@ -70,8 +74,8 @@ public class FundUnitController {
     }
 
     @Operation(summary = "客户资金单位信息导入")
-    @PostMapping("/import")
-    public List<String> importFundUnit(MultipartFile file) {
+    @PostMapping(value = "/import", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public List<String> importFundUnit(@RequestPart(required = false, value = "file") MultipartFile file) {
         long begin = System.currentTimeMillis();
         String fileName = file.getOriginalFilename();
         if (StringUtils.isEmpty(fileName)) {
@@ -96,5 +100,13 @@ public class FundUnitController {
         }
         log.info("客户资金单位信息导入结束，总共耗时：" + (System.currentTimeMillis() - begin) / 1000 + "s");
         return null;
+    }
+
+    @Operation(summary = "客户资金单位信息模板下载")
+    @PostMapping("/export")
+    public void export(HttpServletRequest request, HttpServletResponse response) {
+        List<FundUnitExportVO> exportVO = new ArrayList<>();
+        String fileName = ExcelUtil.encodingFileName(request, "发票单位信息导入模板");
+        ExcelUtil.export2Web(response, fileName, fileName, FundUnitExportVO.class, exportVO);
     }
 }

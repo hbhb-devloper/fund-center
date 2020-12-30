@@ -7,7 +7,14 @@ import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeState;
 import com.hbhb.cw.flowcenter.enums.FlowNodeNoticeTemp;
 import com.hbhb.cw.flowcenter.enums.FlowOperationType;
 import com.hbhb.cw.flowcenter.enums.FlowState;
-import com.hbhb.cw.flowcenter.vo.*;
+import com.hbhb.cw.flowcenter.vo.FlowApproveVO;
+import com.hbhb.cw.flowcenter.vo.FlowWrapperVO;
+import com.hbhb.cw.flowcenter.vo.NodeApproverReqVO;
+import com.hbhb.cw.flowcenter.vo.NodeApproverVO;
+import com.hbhb.cw.flowcenter.vo.NodeInfoVO;
+import com.hbhb.cw.flowcenter.vo.NodeOperationReqVO;
+import com.hbhb.cw.flowcenter.vo.NodeOperationVO;
+import com.hbhb.cw.flowcenter.vo.NodeSuggestionVO;
 import com.hbhb.cw.fundcenter.enums.InvoiceNoticeState;
 import com.hbhb.cw.fundcenter.enums.NodeAccessFiled;
 import com.hbhb.cw.fundcenter.enums.Suggestion;
@@ -21,7 +28,12 @@ import com.hbhb.cw.fundcenter.mapper.FundInvoiceNoticeMapper;
 import com.hbhb.cw.fundcenter.model.FundInvoice;
 import com.hbhb.cw.fundcenter.model.FundInvoiceFlow;
 import com.hbhb.cw.fundcenter.model.FundInvoiceNotice;
-import com.hbhb.cw.fundcenter.rpc.*;
+import com.hbhb.cw.fundcenter.rpc.FlowApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowNodeNoticeApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowRoleApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowRoleUserApiExp;
+import com.hbhb.cw.fundcenter.rpc.FlowTypeApiExp;
+import com.hbhb.cw.fundcenter.rpc.UserApiExp;
 import com.hbhb.cw.fundcenter.service.FundInvoiceFlowService;
 import com.hbhb.cw.fundcenter.service.MailService;
 import com.hbhb.cw.fundcenter.web.vo.FundInvoiceFlowVO;
@@ -34,7 +46,13 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -87,8 +105,10 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
         // 所有节点对应的审批人
         List<NodeApproverReqVO> approvers = approveVO.getApprovers();
         // 审批人map（节点id <=> 审批人id）
-        Map<String, Integer> approverMap = approvers.stream()
-                .collect(Collectors.toMap(NodeApproverReqVO::getFlowNodeId, NodeApproverReqVO::getUserId));
+        Map<String, Integer> approverMap = new HashMap<>(20);
+        for (NodeApproverReqVO approver : approvers) {
+            approverMap.put(approver.getFlowNodeId(), approver.getUserId());
+        }
         // 所有节点id
         List<String> nodeIds = approvers.stream()
                 .map(NodeApproverReqVO::getFlowNodeId).collect(Collectors.toList());
@@ -106,15 +126,8 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
         Integer operation = null;
         // 流程状态
         Integer flowState = null;
-
         // 更新当前节点之前的所有节点提醒状态为已读
         fundInvoiceNoticeMapper.updateStateByInvoiceId(invoiceId, InvoiceNoticeState.READ.value());
-
-//                updateTemplateById(FundInvoiceNotice.builder()
-//                .id(invoiceId)
-//                .state(InvoiceNoticeState.READ.value())
-//                .build());
-
         // 同意
         if (FlowOperationType.AGREE.value().equals(approveVO.getOperation())) {
             operation = FlowOperationType.AGREE.value();
@@ -141,7 +154,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                         throw new FundFlowException(FundFlowErrorCode.NOT_ALL_APPROVERS_ASSIGNED);
                     }
                     List<FundInvoiceFlow> list = new ArrayList<>();
-                    for(NodeApproverReqVO a :approvers) {
+                    for (NodeApproverReqVO a : approvers) {
                         FundInvoiceFlow flows = new FundInvoiceFlow();
                         flows.setId(a.getId());
                         flows.setUserId(a.getUserId());
@@ -179,7 +192,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
             if (inform != null) {
                 String content = inform.replace(FlowNodeNoticeTemp.TITLE.value(), title)
                         .replace(FlowNodeNoticeTemp.APPROVE.value(), userInfo.getNickName());
-                this.saveNotice(invoiceId, approvers.get(0).getUserId(), userId, content, flowTypeId, now);
+                this.saveNotice(invoiceId, userId, approvers.get(0).getUserId(), content, flowTypeId, now);
             }
         }
         // 拒绝
@@ -194,7 +207,7 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
             String content = inform.replace(FlowNodeNoticeTemp.TITLE.value(), title)
                     .replace(FlowNodeNoticeTemp.APPROVE.value(), userInfo.getNickName())
                     .replace(FlowNodeNoticeTemp.CAUSE.value(), approveVO.getSuggestion());
-            this.saveNotice(invoiceId, approvers.get(0).getUserId(), userId, content, flowTypeId, now);
+            this.saveNotice(invoiceId, approvers.get(0).getUserId(), approvers.get(0).getUserId(), content, flowTypeId, now);
         }
 
         // 更新节点信息

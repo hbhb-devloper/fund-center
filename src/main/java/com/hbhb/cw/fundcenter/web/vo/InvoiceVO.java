@@ -38,11 +38,17 @@ public class InvoiceVO implements Serializable {
     @Schema(description = "单位编号")
     private String unitNumber;
 
-    @Schema(description = "发票内容")
+    @Schema(description = "发票内容值")
     private String invoiceContent;
 
-    @Schema(description = "办理业务")
+    @Schema(description = "发票内容")
+    private String invoiceContentLabel;
+
+    @Schema(description = "办理业务值")
     private String business;
+
+    @Schema(description = "办理业务")
+    private String businessLabel;
 
     @Schema(description = "欠费月份:yyyy-MM")
     private String arrearageMonth;

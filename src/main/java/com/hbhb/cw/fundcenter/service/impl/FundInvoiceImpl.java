@@ -63,6 +63,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+
 /**
  * @author wxg
  * @since 2020-09-03
@@ -133,8 +135,8 @@ public class FundInvoiceImpl implements FundInvoiceService {
         InvoiceVO vo = BeanConverter.convert(fundInvoice, InvoiceVO.class);
 
         // 获取字典
-        //    Map<String, String> businessMap = getBusinessMap();
-        //    Map<String, String> contentMap = getInvoiceContentMap();
+        Map<String, String> businessMap = getBusinessMap();
+        Map<String, String> contentMap = getInvoiceContentMap();
 
         // 金额日期字段格式化处理
         vo.setArrearageMonth(DateUtil.dateToStringYmd(fundInvoice.getArrearageMonth()));
@@ -146,7 +148,10 @@ public class FundInvoiceImpl implements FundInvoiceService {
         vo.setInvoiceContent(fundInvoice.getInvoiceContent() == null ? "" :
                 fundInvoice.getInvoiceContent().toString());
         vo.setBusiness(fundInvoice.getBusiness().toString());
-
+        vo.setInvoiceContentLabel(fundInvoice.getInvoiceContent() == null ? "" :
+                contentMap.get(fundInvoice.getInvoiceContent().toString()));
+        vo.setBusinessLabel(fundInvoice.getBusiness() == null ? "" :
+                businessMap.get(fundInvoice.getBusiness().toString()));
         // 获取附件
         List<InvoiceFileVO> files = new ArrayList<>();
         List<FundInvoiceFile> invoiceFiles = fundInvoiceFileMapper.createLambdaQuery()
@@ -457,9 +462,13 @@ public class FundInvoiceImpl implements FundInvoiceService {
      */
     private FundInvoice buildInvoice(InvoiceVO vo) {
         FundInvoice invoice = BeanConverter.convert(vo, FundInvoice.class);
-        invoice.setInvoiceContent(Integer.parseInt(vo.getInvoiceContent()));
+        if (!isEmpty(vo.getInvoiceContent())) {
+            invoice.setInvoiceContent(Integer.parseInt(vo.getInvoiceContent()));
+        }
+        if (!isEmpty(vo.getBusiness())) {
+            invoice.setBusiness(Integer.valueOf(vo.getBusiness()));
+        }
         invoice.setInvoiceAmount(vo.getInvoiceAmount());
-        invoice.setBusiness(Integer.valueOf(vo.getBusiness()));
         // 办理业务类型为欠费缴纳时，两个字段必需
         if (invoice.getBusiness() == 20) {
             // 欠费金额
