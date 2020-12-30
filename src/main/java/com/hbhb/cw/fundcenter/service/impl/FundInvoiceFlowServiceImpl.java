@@ -162,11 +162,6 @@ public class FundInvoiceFlowServiceImpl implements FundInvoiceFlowService {
                     }
                     // 更新各节点审批人
                     fundInvoiceFlowMapper.updateBatchTempById(list);
-//                    fundInvoiceFlowMapper.updateBatchTempById(approvers.stream().map(vo ->
-//                            FundInvoiceFlow.builder()
-//                                    .id(vo.getId())
-//                                    .userId(vo.getUserId())
-//                                    .build()).collect(Collectors.toList()));
                 }
                 // 2-2.如果不是分配者
                 else {
