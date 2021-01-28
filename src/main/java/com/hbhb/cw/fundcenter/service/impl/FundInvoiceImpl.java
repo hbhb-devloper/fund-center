@@ -121,10 +121,15 @@ public class FundInvoiceImpl implements FundInvoiceService {
         Map<String, String> businessMap = getBusinessMap();
         Map<String, String> contentMap = getInvoiceContentMap();
 
+        Map<Boolean, String> isCancellationMap = new HashMap<>(5);
+        isCancellationMap.put(true, "是");
+        isCancellationMap.put(false, "否");
+
         page.getList().forEach(vo -> {
             vo.setInvoiceContent(contentMap.get(vo.getInvoiceContent()));
             vo.setBusiness(businessMap.get(vo.getBusiness()));
             vo.setStateLabel(stateMap.get(vo.getState().toString()));
+            vo.setIsCancellationLabel(isCancellationMap.get(vo.getIsCancellation()));
         });
         return page;
     }

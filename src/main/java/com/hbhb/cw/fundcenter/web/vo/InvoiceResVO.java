@@ -1,11 +1,11 @@
 package com.hbhb.cw.fundcenter.web.vo;
 
-import java.io.Serializable;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * @author wxg
@@ -78,6 +78,9 @@ public class InvoiceResVO implements Serializable {
 
     @Schema(description = "是否作废")
     private Boolean isCancellation;
+
+    @Schema(description = "是否作废", required = true)
+    private String isCancellationLabel;
 
     @Schema(description = "是否含附件(0-不含,1-含)")
     private Boolean hasFile;
