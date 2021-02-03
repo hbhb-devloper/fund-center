@@ -261,7 +261,7 @@ public class FundInvoiceImpl implements FundInvoiceService {
         String nickName = userInfo.getNickName();
         FundInvoice invoice = fundInvoiceMapper.single(id);
         // 判断用户身份
-        if (!nickName.equals(invoice.getClientManager()) || !nickName.equals(invoice.getInvoiceUser())) {
+        if (!nickName.equals(invoice.getClientManager())) {
             throw new FundException(FundErrorCode.FUND_INVOICE_PERMISSION_DENIED);
         }
         // 逻辑删除
